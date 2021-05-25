@@ -3,52 +3,54 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "Components/ArrowComponent.h"
-#include "TurretPawn.generated.h"
+#include "GameFramework/Actor.h"
+#include <Runtime/Engine/Classes/Components/ArrowComponent.h>
+#include "TurretActor.generated.h"
 
 UCLASS()
-class STARBASE_DEFENSE_API ATurretPawn : public APawn
+class STARBASE_DEFENSE_API ATurretActor : public AActor
 {
 	GENERATED_BODY()
 
-private:
-	float closestEnemy = 10000;
-	FTimerHandle TimerHandle;
-	bool shooting = false;
 public:
 	// Sets default values for this pawn's properties
-	ATurretPawn();
+	ATurretActor();
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Variables")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
 		float RotationSpeed;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Classes")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Classes")
 		TSubclassOf<AActor> EnemyClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Classes")
 		TSubclassOf<AActor> BulletClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		USceneComponent* Root;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UArrowComponent* RotationArrow;
+		UStaticMeshComponent* StaticBottom;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* BodyCylinder;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* GunCone;
+		UStaticMeshComponent* RotatableTop;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UArrowComponent* BulletArrow;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	UPROPERTY(BlueprintReadOnly, Category = "Variables")
+		float closestEnemy = 10000;
 
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	AActor* findClosestEnemy();
+	UFUNCTION(BlueprintCallable, Category = "MyOwn")
+		AActor* findClosestEnemy();
+
+	UFUNCTION(BlueprintCallable, Category = "MyOwn")
+		void RotateToDefault (float DeltaTime);
 	UFUNCTION(BlueprintCallable, Category = "MyOwn")
 		void RotateTowards(FVector TargetLocation, float DeltaTime);
-	void CheckIfAimingAtEnemy();
-	void fire();
+
+	UFUNCTION(BlueprintCallable, Category = "MyOwn")
+		bool CheckIfAimingAtEnemy();
+
+	UFUNCTION(BlueprintCallable, Category = "MyOwn")
+		void fire();
 };
