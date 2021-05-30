@@ -33,7 +33,7 @@ TArray<AActor*> ARadarActor::SpotEnemies()
 	float distanceToEnemy;
 	for (int i = 0; i < FoundActors.Num(); i++) {
 		{
-			distanceToEnemy = FVector::Dist(FoundActors[i]->GetActorLocation(), this->GetActorLocation());
+			distanceToEnemy = FVector::Dist(FVector(FoundActors[i]->GetActorLocation().X, FoundActors[i]->GetActorLocation().Y, 0), FVector(this->GetActorLocation().X, this->GetActorLocation().Y, 0));
 			if (distanceToEnemy <= signalRange)
 				ActorsInRange.Add(FoundActors[i]);
 		}

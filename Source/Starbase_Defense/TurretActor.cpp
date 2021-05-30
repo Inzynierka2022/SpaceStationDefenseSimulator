@@ -31,7 +31,6 @@ ATurretActor::ATurretActor()
 void ATurretActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
 // Called every frame
@@ -75,28 +74,23 @@ void ATurretActor::RotateToDefault(float DeltaTime)
 void ATurretActor::RotateTowards(FVector TargetLocation, float DeltaTime)
 {
 	FRotator TurretRot = UKismetMathLibrary::FindLookAtRotation(this->GetActorLocation(), FVector(TargetLocation.X, TargetLocation.Y, this->GetActorLocation().Z));
-	FRotator NewRot = FMath::RInterpConstantTo(this->RotatableTop->GetRelativeRotation(), TurretRot, DeltaTime, RotationSpeed);
-	RotatableTop->SetRelativeRotation(NewRot);
+	FRotator NewRot = FMath::RInterpConstantTo(this->RotatableTop->GetComponentRotation(), TurretRot, DeltaTime, RotationSpeed);
+	RotatableTop->SetWorldRotation(NewRot);
 }
 
-bool ATurretActor::CheckIfAimingAtEnemy()
+FHitResult ATurretActor::CheckIfAimingAtEnemy()
 {
 	FVector loc;
 	FRotator rot;
 	FHitResult hit;
-	loc = RotatableTop->GetComponentLocation();
-	rot = RotatableTop->GetComponentRotation();
+	loc = BulletArrow->GetComponentLocation();
+	rot = BulletArrow->GetComponentRotation();
 
 	FVector start = loc + (rot.Vector() * 65);
-	FVector end = loc + (rot.Vector() * 500);
+	FVector end = loc + (rot.Vector() * FireRange);
 	FCollisionQueryParams params;
-
-	return GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Visibility, params);
-	//return hitAnything && hit.Actor->
-	/*if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT(" %d"), shooting));*/
-
-		//DrawDebugLine(GetWorld(), start, end, FColor::Orange, false, 0.1f);
+	GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Visibility, params);
+	return hit;
 }
 
 void ATurretActor::fire()

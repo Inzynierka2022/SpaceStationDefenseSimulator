@@ -18,6 +18,10 @@ public:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
 		float RotationSpeed;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
+		float FireRange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Variables")
+		float ViewRange;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Classes")
 		TSubclassOf<AActor> EnemyClass;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Classes")
@@ -49,7 +53,7 @@ public:
 		void RotateTowards(FVector TargetLocation, float DeltaTime);
 
 	UFUNCTION(BlueprintCallable, Category = "MyOwn")
-		bool CheckIfAimingAtEnemy();
+		FHitResult CheckIfAimingAtEnemy();
 
 	UFUNCTION(BlueprintCallable, Category = "MyOwn")
 		void fire();
