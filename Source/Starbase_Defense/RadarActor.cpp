@@ -38,6 +38,7 @@ TArray<AActor*> ARadarActor::SpotEnemies()
 				ActorsInRange.Add(FoundActors[i]);
 		}
 	}
+	//komentarz
 	return ActorsInRange;
 }
 
